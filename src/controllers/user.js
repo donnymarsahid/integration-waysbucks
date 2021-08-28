@@ -55,8 +55,10 @@ exports.deleteUser = async (req, res) => {
 
 exports.addProfile = async (req, res) => {
   const idUser = req.user.id;
+
+  const { category: categoryName, ...data } = req.body;
   try {
-    await profile.create({ ...req.body, idUser });
+    await profile.create({ ...data, image: req.file.filename, idUser });
     res.send({
       status: 'success',
       message: 'Add profile finished',
