@@ -88,7 +88,7 @@ exports.login = async (req, res) => {
         message: 'email/password incorrect',
       });
     }
-    const token = jwt.sign({ id: userExist.id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: userExist.id, status: userExist.status }, process.env.JWT_SECRET);
     res.status(200).send({
       status: 'success',
       data: {
