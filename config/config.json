@@ -3,7 +3,7 @@
     "username": "root",
     "password": null,
     "database": "waysbucks_be",
-    "host": "127.0.0.1",
+    "host": "localhost",
     "dialect": "mysql"
   },
   "test": {

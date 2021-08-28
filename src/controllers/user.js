@@ -1,12 +1,20 @@
-const { user } = require('../../models');
+const { user, profile } = require('../../models');
 
 exports.getUsers = async (req, res) => {
   try {
     const users = await user.findAll({
+      include: {
+        model: profile,
+        as: 'profile',
+        attributes: {
+          exclude: ['createdAt', 'updatedAt', 'idUser'],
+        },
+      },
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'status', 'password'],
+        exclude: ['password', 'createdAt', 'updatedAt'],
       },
     });
+
     res.send({
       status: 'success',
       data: {
@@ -35,6 +43,23 @@ exports.deleteUser = async (req, res) => {
       data: {
         id,
       },
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: 'failed',
+      message: 'Server Error',
+    });
+  }
+};
+
+exports.addProfile = async (req, res) => {
+  const idUser = req.user.id;
+  try {
+    await profile.create({ ...req.body, idUser });
+    res.send({
+      status: 'success',
+      message: 'Add profile finished',
     });
   } catch (error) {
     console.log(error);
