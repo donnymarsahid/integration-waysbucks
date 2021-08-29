@@ -11,20 +11,20 @@ const { uploadFile } = require('../middlewares/uploadFile');
 router.post('/login', login);
 router.post('/register', register);
 
-router.get('/users', authToken, permission('admin'), getUsers);
+router.get('/users', getUsers);
 router.delete('/user/:id', deleteUser);
 router.post('/profile', authToken, uploadFile('image'), addProfile);
 
 router.get('/products', getProducts);
-router.post('/product', addProduct);
 router.get('/product/:id', detailProduct);
-router.put('/product/:id', updateProduct);
-router.delete('/product/:id', deleteProduct);
+router.post('/product', authToken, permission('admin'), addProduct);
+router.put('/product/:id', authToken, permission('admin'), updateProduct);
+router.delete('/product/:id', authToken, permission('admin'), deleteProduct);
 
 router.get('/toppings', getToppings);
-router.post('/topping', addTopping);
 router.get('/topping/:id', detailTopping);
-router.put('/topping/:id', updateTopping);
-router.delete('/topping/:id', deleteTopping);
+router.post('/topping', authToken, permission('admin'), addTopping);
+router.put('/topping/:id', authToken, permission('admin'), updateTopping);
+router.delete('/topping/:id', authToken, permission('admin'), deleteTopping);
 
 module.exports = router;

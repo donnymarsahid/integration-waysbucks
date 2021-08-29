@@ -65,7 +65,8 @@ exports.addTopping = async (req, res) => {
     return false;
   }
   try {
-    const newTopping = await topping.create({ ...req.body });
+    const idUser = req.user.id;
+    const newTopping = await topping.create({ ...req.body, idUser });
     const { id, title, price, image } = newTopping;
     res.send({
       status: 'success',
@@ -89,12 +90,16 @@ exports.addTopping = async (req, res) => {
 
 exports.updateTopping = async (req, res) => {
   try {
+    const idUser = req.user.id;
     const idTopping = req.params.id;
-    await topping.update(req.body, {
-      where: {
-        id: idTopping,
-      },
-    });
+    await topping.update(
+      { ...req.body, idUser },
+      {
+        where: {
+          id: idTopping,
+        },
+      }
+    );
     const findTopping = await topping.findOne({
       where: {
         id: idTopping,
