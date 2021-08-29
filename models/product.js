@@ -1,9 +1,9 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class profile extends Model {
+  class product extends Model {
     static associate(models) {
-      profile.belongsTo(models.user, {
+      product.belongsTo(models.user, {
         as: 'user',
         foreignKey: {
           name: 'idUser',
@@ -11,23 +11,23 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
-  profile.init(
+  product.init(
     {
       id: {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
       },
-      phone: DataTypes.STRING,
-      gender: DataTypes.STRING,
-      address: DataTypes.STRING,
+      title: DataTypes.STRING,
+      price: DataTypes.INTEGER,
       image: DataTypes.STRING,
+      status: DataTypes.STRING,
       idUser: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: 'profile',
+      modelName: 'product',
     }
   );
-  return profile;
+  return product;
 };
