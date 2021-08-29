@@ -29,6 +29,7 @@ exports.register = async (req, res) => {
         message: error.details[0].message,
       },
     });
+
   try {
     const saltRounds = await bcrypt.genSalt(10);
     const hashingPassword = await bcrypt.hash(req.body.password, saltRounds);
