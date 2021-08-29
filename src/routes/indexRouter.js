@@ -11,6 +11,6 @@ router.post('/register', register);
 
 router.get('/users', authToken, permission('user'), getUsers);
 router.delete('/user/:id', deleteUser);
-router.post('/user', authToken, uploadFile('image'), addProfile);
+router.post('/profile', authToken, uploadFile('image'), addProfile);
 
 module.exports = router;
