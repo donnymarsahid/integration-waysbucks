@@ -31,6 +31,7 @@ exports.getTransactions = async (req, res) => {
                   through: {
                     model: toppingProduct,
                     as: 'junction',
+                    attributes: [],
                   },
                   attributes: {
                     exclude: ['createdAt', 'updatedAt'],
@@ -115,6 +116,7 @@ exports.addTransaction = async (req, res) => {
                   through: {
                     model: toppingProduct,
                     as: 'junction',
+                    attributes: [],
                   },
                   attributes: {
                     exclude: ['createdAt', 'updatedAt'],
@@ -176,6 +178,7 @@ exports.getUserTransaction = async (req, res) => {
                   through: {
                     model: toppingProduct,
                     as: 'junction',
+                    attributes: [],
                   },
                   attributes: {
                     exclude: ['createdAt', 'updatedAt'],
@@ -221,5 +224,79 @@ exports.deleteTransaction = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+  }
+};
+
+exports.updateTransaction = async (req, res) => {
+  try {
+    const idOrder = req.params.id;
+    await transaction.update(
+      { ...req.body },
+      {
+        where: {
+          id: idOrder,
+        },
+      }
+    );
+
+    const resultTransaction = await transaction.findOne({
+      where: {
+        id: idOrder,
+      },
+      include: [
+        {
+          model: user,
+          as: 'user',
+          attributes: {
+            exclude: ['createdAt', 'updatedAt', 'password', 'status'],
+          },
+        },
+        {
+          model: cart,
+          as: 'cart',
+          attributes: {
+            exclude: ['createdAt', 'updatedAt'],
+          },
+          include: [
+            {
+              model: product,
+              as: 'product',
+              attributes: {
+                exclude: ['createdAt', 'updatedAt'],
+              },
+              include: [
+                {
+                  model: topping,
+                  as: 'toppings',
+                  through: {
+                    model: toppingProduct,
+                    as: 'junction',
+                    attributes: [],
+                  },
+                  attributes: {
+                    exclude: ['createdAt', 'updatedAt'],
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'idProduct', 'idUser', 'idOrder', 'price'],
+      },
+    });
+    res.send({
+      status: 'success update transaction',
+      data: {
+        transaction: resultTransaction,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: 'failed',
+      message: 'Server Error',
+    });
   }
 };
