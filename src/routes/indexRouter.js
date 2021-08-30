@@ -34,7 +34,7 @@ router.post('/cart/:id', authToken, addCart);
 router.delete('/cart/:id', authToken, deleteCart);
 
 router.get('/transactions', authToken, getTransactions);
-router.post('/transaction', authToken, addTransaction);
+router.post('/transaction', authToken, uploadFile('image'), addTransaction);
 router.get('/transaction/:id', authToken, getUserTransaction);
 router.delete('/transaction/:id', authToken, deleteTransaction);
 

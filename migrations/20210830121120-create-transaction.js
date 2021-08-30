@@ -29,6 +29,9 @@ module.exports = {
       price: {
         type: Sequelize.INTEGER,
       },
+      attachment: {
+        type: Sequelize.STRING,
+      },
       status: {
         type: Sequelize.STRING,
       },

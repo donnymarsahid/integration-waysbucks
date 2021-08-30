@@ -70,11 +70,16 @@ exports.addTransaction = async (req, res) => {
         id: idOrder,
       },
     });
+
+    const path = process.env.IMG_URL;
+    const upload = req.file.filename;
+    const imageUpload = path + upload;
     if (findOrder) {
       await transaction.create({
         idOrder: idOrder,
         status: status,
         idUser,
+        attachment: imageUpload,
       });
     }
 
