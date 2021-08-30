@@ -84,10 +84,17 @@ exports.addTransaction = async (req, res) => {
       },
       include: [
         {
+          model: user,
+          as: 'user',
+          attributes: {
+            exclude: ['createdAt', 'updatedAt', 'password', 'status'],
+          },
+        },
+        {
           model: cart,
           as: 'cart',
           attributes: {
-            exclude: ['createdAt', 'updatedAt', 'price'],
+            exclude: ['createdAt', 'updatedAt'],
           },
           include: [
             {
@@ -114,7 +121,7 @@ exports.addTransaction = async (req, res) => {
         },
       ],
       attributes: {
-        exclude: ['createdAt', 'updatedAt'],
+        exclude: ['createdAt', 'updatedAt', 'idProduct', 'idUser', 'idOrder', 'price'],
       },
     });
 
@@ -122,6 +129,89 @@ exports.addTransaction = async (req, res) => {
       status: status,
       data: {
         transaction: resultTransaction,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.getUserTransaction = async (req, res) => {
+  try {
+    const idUser = req.params.id;
+    const userTransaction = await transaction.findOne({
+      where: {
+        id: idUser,
+      },
+      include: [
+        {
+          model: user,
+          as: 'user',
+          attributes: {
+            exclude: ['createdAt', 'updatedAt', 'password', 'status'],
+          },
+        },
+        {
+          model: cart,
+          as: 'cart',
+          attributes: {
+            exclude: ['createdAt', 'updatedAt'],
+          },
+          include: [
+            {
+              model: product,
+              as: 'product',
+              attributes: {
+                exclude: ['createdAt', 'updatedAt'],
+              },
+              include: [
+                {
+                  model: topping,
+                  as: 'toppings',
+                  through: {
+                    model: toppingProduct,
+                    as: 'junction',
+                  },
+                  attributes: {
+                    exclude: ['createdAt', 'updatedAt'],
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'idProduct', 'idUser', 'idOrder', 'price'],
+      },
+    });
+    res.send({
+      status: 'success',
+      data: {
+        userTransaction,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: 'failed',
+      message: 'Server Error',
+    });
+  }
+};
+
+exports.deleteTransaction = async (req, res) => {
+  try {
+    const idOrder = req.params.id;
+    await transaction.destroy({
+      where: {
+        id: idOrder,
+      },
+    });
+    res.send({
+      status: 'success',
+      data: {
+        id: idOrder,
       },
     });
   } catch (error) {
