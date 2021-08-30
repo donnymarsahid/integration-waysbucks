@@ -45,7 +45,7 @@ exports.getCarts = async (req, res) => {
 };
 
 exports.addCart = async (req, res) => {
-  const { idTopping, idProduct } = req.body;
+  const { idTopping, idProduct, quantity } = req.body;
 
   try {
     idTopping.map(async (data) => {
@@ -53,10 +53,12 @@ exports.addCart = async (req, res) => {
         idProduct: idProduct,
         idTopping: data,
       });
-      await cart.create({
-        idProduct: idProduct,
-      });
     });
+    await cart.create({
+      idProduct: idProduct,
+      quantity,
+    });
+
     res.send({
       orders: {
         idTopping,
