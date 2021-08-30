@@ -11,21 +11,6 @@ exports.getUsers = async (req, res) => {
             exclude: ['createdAt', 'updatedAt', 'idUser'],
           },
         },
-        {
-          model: product,
-          as: 'products',
-          attributes: {
-            exclude: ['createdAt', 'updatedAt'],
-          },
-          include: {
-            model: topping,
-            as: 'toppings',
-            through: {
-              model: toppingProduct,
-              as: 'junction',
-            },
-          },
-        },
       ],
       attributes: {
         exclude: ['password', 'createdAt', 'updatedAt'],
@@ -71,11 +56,13 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.addProfile = async (req, res) => {
+  const path = process.env.IMG_URL;
+
   const idUser = req.user.id;
   console.log(idUser);
   const { category: categoryName, ...data } = req.body;
   try {
-    await profile.create({ ...data, image: req.file.filename, idUser });
+    await profile.create({ ...data, image: path + req.file.filename, idUser });
     res.send({
       status: 'success',
       message: 'Add profile finished',

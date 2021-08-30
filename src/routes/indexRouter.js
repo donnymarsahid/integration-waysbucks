@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const { login, register } = require('../controllers/auth');
-const { getCarts, addCart } = require('../controllers/cart');
+const { getCarts, addCart, deleteCart } = require('../controllers/cart');
 const { addProduct, getProducts, detailProduct, updateProduct, deleteProduct } = require('../controllers/product');
 const { getToppings, addTopping, detailTopping, updateTopping, deleteTopping } = require('../controllers/topping');
+const { addTransaction, getTransactions } = require('../controllers/transaction');
 const { getUsers, deleteUser, addProfile } = require('../controllers/user');
 const { authToken, permission } = require('../middlewares/auth');
 const { uploadFile } = require('../middlewares/uploadFile');
@@ -18,17 +19,21 @@ router.post('/profile', authToken, uploadFile('image'), addProfile);
 
 router.get('/products', getProducts);
 router.get('/product/:id', detailProduct);
-router.post('/product', authToken, permission('admin'), addProduct);
+router.post('/product', authToken, permission('admin'), uploadFile('image'), addProduct);
 router.put('/product/:id', authToken, permission('admin'), updateProduct);
 router.delete('/product/:id', authToken, permission('admin'), deleteProduct);
 
 router.get('/toppings', getToppings);
 router.get('/topping/:id', detailTopping);
-router.post('/topping', authToken, permission('admin'), addTopping);
+router.post('/topping', authToken, permission('admin'), uploadFile('image'), addTopping);
 router.put('/topping/:id', authToken, permission('admin'), updateTopping);
 router.delete('/topping/:id', authToken, permission('admin'), deleteTopping);
 
 router.get('/carts', getCarts);
-router.post('/cart', addCart);
+router.post('/cart/:id', authToken, addCart);
+router.delete('/cart/:id', authToken, deleteCart);
+
+router.get('/transactions', authToken, permission('admin'), getTransactions);
+router.post('/transaction', authToken, permission('admin'), addTransaction);
 
 module.exports = router;

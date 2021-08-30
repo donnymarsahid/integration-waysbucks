@@ -76,8 +76,11 @@ exports.addProduct = async (req, res) => {
   }
   try {
     const idUser = req.user.id;
-    const newProduct = await product.create({ ...req.body, idUser });
-    const { id, title, price, image, status } = newProduct;
+    const path = process.env.IMG_URL;
+    const upload = req.file.filename;
+    const imageUpload = path + upload;
+    const newProduct = await product.create({ ...req.body, image: imageUpload, idUser });
+    const { id, title, price, status } = newProduct;
     res.send({
       status: 'success',
       data: {
@@ -85,7 +88,7 @@ exports.addProduct = async (req, res) => {
           id,
           title,
           price,
-          image,
+          image: imageUpload,
           status,
         },
       },

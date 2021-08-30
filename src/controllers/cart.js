@@ -8,7 +8,7 @@ exports.getCarts = async (req, res) => {
           model: product,
           as: 'product',
           attributes: {
-            exclude: ['createdAt', 'updatedAt'],
+            exclude: ['createdAt', 'updatedAt', 'status', 'idUser'],
           },
           include: [
             {
@@ -17,6 +17,7 @@ exports.getCarts = async (req, res) => {
               through: {
                 model: toppingProduct,
                 as: 'junction',
+                attributes: [],
               },
               attributes: {
                 exclude: ['createdAt', 'updatedAt'],
@@ -26,7 +27,7 @@ exports.getCarts = async (req, res) => {
         },
       ],
       attributes: {
-        exclude: ['createdAt', 'updatedAt'],
+        exclude: ['createdAt', 'updatedAt', 'idProduct'],
       },
     });
     res.send({
@@ -45,7 +46,8 @@ exports.getCarts = async (req, res) => {
 };
 
 exports.addCart = async (req, res) => {
-  const { idTopping, idProduct, quantity } = req.body;
+  const idProduct = req.params.id;
+  const { idTopping, quantity } = req.body;
 
   try {
     idTopping.map(async (data) => {
@@ -59,9 +61,41 @@ exports.addCart = async (req, res) => {
       quantity,
     });
 
+    const cartResult = await cart.findOne({
+      where: {
+        idProduct: idProduct,
+      },
+      include: [
+        {
+          model: product,
+          as: 'product',
+          attributes: {
+            exclude: ['createdAt', 'updatedAt', 'status', 'idUser'],
+          },
+          include: [
+            {
+              model: topping,
+              as: 'toppings',
+              through: {
+                model: toppingProduct,
+                as: 'junction',
+                attributes: [],
+              },
+              attributes: {
+                exclude: ['createdAt', 'updatedAt'],
+              },
+            },
+          ],
+        },
+      ],
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'idProduct'],
+      },
+    });
     res.send({
-      orders: {
-        idTopping,
+      status: 'success add cart',
+      data: {
+        cart: cartResult,
       },
     });
   } catch (error) {
@@ -70,5 +104,24 @@ exports.addCart = async (req, res) => {
       status: 'failed',
       message: 'Server Error',
     });
+  }
+};
+
+exports.deleteCart = async (req, res) => {
+  try {
+    const idProduct = req.params.id;
+    await cart.destroy({
+      where: {
+        id: idProduct,
+      },
+    });
+    res.send({
+      status: 'success',
+      data: {
+        id: idProduct,
+      },
+    });
+  } catch (error) {
+    console.log(error);
   }
 };

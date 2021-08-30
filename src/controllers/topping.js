@@ -65,9 +65,12 @@ exports.addTopping = async (req, res) => {
     return false;
   }
   try {
+    const path = process.env.IMG_URL;
+    const upload = req.file.filename;
+    const imageUpload = path + upload;
     const idUser = req.user.id;
-    const newTopping = await topping.create({ ...req.body, idUser });
-    const { id, title, price, image } = newTopping;
+    const newTopping = await topping.create({ ...req.body, image: imageUpload, idUser });
+    const { id, title, price } = newTopping;
     res.send({
       status: 'success',
       data: {
@@ -75,7 +78,7 @@ exports.addTopping = async (req, res) => {
           id,
           title,
           price,
-          image,
+          image: imageUpload,
         },
       },
     });
