@@ -1,33 +1,33 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class topping extends Model {
+  class cart extends Model {
     static associate(models) {
-      topping.belongsToMany(models.product, {
-        as: 'products',
-        through: {
-          model: 'toppingProduct',
-          as: 'junction',
+      cart.belongsTo(models.product, {
+        as: 'product',
+        foreignKey: {
+          name: 'idProduct',
         },
-        foreignKey: 'idTopping',
       });
     }
   }
-  topping.init(
+  cart.init(
     {
       id: {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
       },
+      idProduct: DataTypes.INTEGER,
       title: DataTypes.STRING,
       price: DataTypes.INTEGER,
       image: DataTypes.STRING,
+      quantity: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: 'topping',
+      modelName: 'cart',
     }
   );
-  return topping;
+  return cart;
 };

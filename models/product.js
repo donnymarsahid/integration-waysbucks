@@ -9,11 +9,19 @@ module.exports = (sequelize, DataTypes) => {
           name: 'idUser',
         },
       });
-      product.hasMany(models.order, {
-        as: 'orders',
+      product.hasMany(models.cart, {
+        as: 'carts',
         foreignKey: {
           name: 'idProduct',
         },
+      });
+      product.belongsToMany(models.topping, {
+        as: 'toppings',
+        through: {
+          model: 'toppingProduct',
+          as: 'junction',
+        },
+        foreignKey: 'idProduct',
       });
     }
   }
