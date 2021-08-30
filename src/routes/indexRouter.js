@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { login, register } = require('../controllers/auth');
+const { getOrders, addOrder } = require('../controllers/order');
 const { addProduct, getProducts, detailProduct, updateProduct, deleteProduct } = require('../controllers/product');
 const { getToppings, addTopping, detailTopping, updateTopping, deleteTopping } = require('../controllers/topping');
 const { getUsers, deleteUser, addProfile } = require('../controllers/user');
@@ -26,5 +27,8 @@ router.get('/topping/:id', detailTopping);
 router.post('/topping', authToken, permission('admin'), addTopping);
 router.put('/topping/:id', authToken, permission('admin'), updateTopping);
 router.delete('/topping/:id', authToken, permission('admin'), deleteTopping);
+
+router.get('/orders', getOrders);
+router.post('/order', addOrder);
 
 module.exports = router;

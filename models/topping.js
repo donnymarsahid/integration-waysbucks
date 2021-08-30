@@ -2,7 +2,14 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class topping extends Model {
-    static associate(models) {}
+    static associate(models) {
+      topping.hasMany(models.order, {
+        as: 'orders',
+        foreignKey: {
+          name: 'idProduct',
+        },
+      });
+    }
   }
   topping.init(
     {
