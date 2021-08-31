@@ -63,7 +63,7 @@ exports.getTransactions = async (req, res) => {
 
 exports.addTransaction = async (req, res) => {
   try {
-    const { status, idOrder } = req.body;
+    const { idOrder } = req.body;
     const idUser = req.user.id;
 
     const findOrder = await cart.findOne({
@@ -78,7 +78,7 @@ exports.addTransaction = async (req, res) => {
     if (findOrder) {
       await transaction.create({
         idOrder: idOrder,
-        status: status,
+        status: 'waiting approve',
         idUser,
         attachment: imageUpload,
       });
@@ -133,7 +133,7 @@ exports.addTransaction = async (req, res) => {
     });
 
     res.send({
-      status: status,
+      status: 'success',
       data: {
         transaction: resultTransaction,
       },
