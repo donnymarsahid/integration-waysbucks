@@ -179,3 +179,30 @@ exports.deleteTransaction = async (req, res) => {
     console.log(error);
   }
 };
+
+exports.updateTransaction = async (req, res) => {
+  try {
+    const idTransaction = req.params.id;
+    await transaction.update(
+      { ...req.body },
+      {
+        where: {
+          id: idTransaction,
+        },
+      }
+    );
+
+    res.send({
+      status: 'success',
+      data: {
+        idTransaction,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: 'failed',
+      message: 'Server Error',
+    });
+  }
+};
