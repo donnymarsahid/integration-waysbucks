@@ -17,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
           name: 'idTransaction',
         },
       });
+      order.belongsTo(models.product, {
+        as: 'product',
+        foreignKey: {
+          name: 'idProduct',
+        },
+      });
     }
   }
   order.init(

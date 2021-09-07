@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { login, register, checkAuth } = require('../controllers/auth');
+const { getCarts, addCart, deleteCart, getOrders } = require('../controllers/cart');
 const { addProduct, getProducts, detailProduct, updateProduct, deleteProduct, getTypeCoffee } = require('../controllers/product');
 const { getToppings, addTopping, detailTopping, updateTopping, deleteTopping } = require('../controllers/topping');
 const { getUsers, deleteUser } = require('../controllers/user');
@@ -31,5 +32,13 @@ router.get('/topping/:id', detailTopping);
 router.post('/topping', authToken, permission('admin'), uploadFile('image'), addTopping);
 router.put('/topping/:id', authToken, permission('admin'), uploadFile('image'), updateTopping);
 router.delete('/topping/:id', authToken, permission('admin'), deleteTopping);
+
+// Cart
+router.get('/carts', authToken, getCarts);
+router.post('/cart/:id', authToken, addCart);
+router.delete('/cart/:id', authToken, deleteCart);
+
+// Order
+router.get('/orders', authToken, getOrders);
 
 module.exports = router;
