@@ -10,12 +10,16 @@ exports.getTransactions = async (req, res) => {
         {
           model: transaction,
           as: 'transactions',
-          attributes: ['createdAt'],
+          attributes: {
+            exclude: ['createdAt'],
+          },
           include: [
             {
               model: order,
               as: 'orders',
-              attributes: ['createdAt'],
+              attributes: {
+                exclude: ['createdAt'],
+              },
               include: [
                 {
                   model: product,
