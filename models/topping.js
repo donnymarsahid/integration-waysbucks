@@ -3,10 +3,24 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class topping extends Model {
     static associate(models) {
-      topping.belongsToMany(models.product, {
-        as: 'products',
+      topping.belongsTo(models.user, {
+        as: 'user',
+        foreignKey: {
+          name: 'idUser',
+        },
+      });
+      topping.belongsToMany(models.cart, {
+        as: 'carts',
         through: {
-          model: 'toppingProduct',
+          model: 'toppingCart',
+          as: 'junction',
+        },
+        foreignKey: 'idTopping',
+      });
+      topping.belongsToMany(models.order, {
+        as: 'orders',
+        through: {
+          model: 'toppingOrder',
           as: 'junction',
         },
         foreignKey: 'idTopping',
@@ -23,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
       price: DataTypes.INTEGER,
       image: DataTypes.STRING,
+      idUser: DataTypes.INTEGER,
     },
     {
       sequelize,

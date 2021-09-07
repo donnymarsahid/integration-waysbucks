@@ -3,20 +3,26 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
     static associate(models) {
-      user.hasOne(models.profile, {
-        as: 'profile',
+      user.hasMany(models.transaction, {
+        as: 'transactions',
+        foreignKey: {
+          name: 'idUser',
+        },
+      });
+      user.hasMany(models.cart, {
+        as: 'carts',
+        foreignKey: {
+          name: 'idUser',
+        },
+      });
+      user.hasMany(models.topping, {
+        as: 'toppings',
         foreignKey: {
           name: 'idUser',
         },
       });
       user.hasMany(models.product, {
         as: 'products',
-        foreignKey: {
-          name: 'idUser',
-        },
-      });
-      user.hasMany(models.transaction, {
-        as: 'transactions',
         foreignKey: {
           name: 'idUser',
         },
@@ -33,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       fullname: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
+      image: DataTypes.STRING,
       status: DataTypes.STRING,
     },
     {

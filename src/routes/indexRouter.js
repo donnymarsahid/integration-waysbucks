@@ -1,42 +1,35 @@
 const express = require('express');
 const router = express.Router();
 
-const { login, register } = require('../controllers/auth');
-const { getCarts, addCart, deleteCart } = require('../controllers/cart');
-const { addProduct, getProducts, detailProduct, updateProduct, deleteProduct } = require('../controllers/product');
+const { login, register, checkAuth } = require('../controllers/auth');
+const { addProduct, getProducts, detailProduct, updateProduct, deleteProduct, getTypeCoffee } = require('../controllers/product');
 const { getToppings, addTopping, detailTopping, updateTopping, deleteTopping } = require('../controllers/topping');
-const { addTransaction, getTransactions, getUserTransaction, deleteTransaction, updateTransaction } = require('../controllers/transaction');
-const { getUsers, deleteUser, addProfile } = require('../controllers/user');
+const { getUsers, deleteUser } = require('../controllers/user');
 const { authToken, permission } = require('../middlewares/auth');
 const { uploadFile } = require('../middlewares/uploadFile');
 
+// Authentification
 router.post('/login', login);
 router.post('/register', register);
+router.get('/check-auth', authToken, checkAuth);
 
+// User
 router.get('/users', getUsers);
-router.delete('/user/:id', deleteUser);
-router.post('/profile', authToken, uploadFile('image'), addProfile);
+router.delete('/user/:id', authToken, permission('admin'), deleteUser);
 
+// Product
 router.get('/products', getProducts);
 router.get('/product/:id', detailProduct);
+router.get('/typecoffee', getTypeCoffee);
 router.post('/product', authToken, permission('admin'), uploadFile('image'), addProduct);
-router.put('/product/:id', authToken, permission('admin'), updateProduct);
+router.put('/product/:id', authToken, permission('admin'), uploadFile('image'), updateProduct);
 router.delete('/product/:id', authToken, permission('admin'), deleteProduct);
 
+// Topping
 router.get('/toppings', getToppings);
 router.get('/topping/:id', detailTopping);
 router.post('/topping', authToken, permission('admin'), uploadFile('image'), addTopping);
-router.put('/topping/:id', authToken, permission('admin'), updateTopping);
+router.put('/topping/:id', authToken, permission('admin'), uploadFile('image'), updateTopping);
 router.delete('/topping/:id', authToken, permission('admin'), deleteTopping);
-
-router.get('/carts', getCarts);
-router.post('/cart/:id', authToken, addCart);
-router.delete('/cart/:id', authToken, deleteCart);
-
-router.get('/transactions', authToken, getTransactions);
-router.post('/transaction', authToken, uploadFile('image'), addTransaction);
-router.get('/transaction/:id', authToken, getUserTransaction);
-router.delete('/transaction/:id', authToken, deleteTransaction);
-router.put('/transaction/:id', authToken, permission('admin'), updateTransaction);
 
 module.exports = router;

@@ -141,6 +141,40 @@ exports.updateProduct = async (req, res) => {
   }
 };
 
+exports.getTypeCoffee = async (req, res) => {
+  try {
+    const products = await product.findAll({
+      where: {
+        typeCoffee: 'coffee variant',
+      },
+      include: [
+        {
+          model: user,
+          as: 'user',
+          attributes: {
+            exclude: ['createdAt', 'updatedAt', 'password'],
+          },
+        },
+      ],
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'idUser'],
+      },
+    });
+    res.send({
+      status: 'success',
+      data: {
+        products,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: 'failed',
+      message: 'Server Error',
+    });
+  }
+};
+
 exports.deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;

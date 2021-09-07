@@ -15,14 +15,6 @@ module.exports = (sequelize, DataTypes) => {
           name: 'idProduct',
         },
       });
-      product.belongsToMany(models.topping, {
-        as: 'toppings',
-        through: {
-          model: 'toppingProduct',
-          as: 'junction',
-        },
-        foreignKey: 'idProduct',
-      });
     }
   }
   product.init(
@@ -35,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
       price: DataTypes.INTEGER,
       image: DataTypes.STRING,
+      typeCoffee: DataTypes.STRING,
       status: DataTypes.STRING,
       idUser: DataTypes.INTEGER,
     },

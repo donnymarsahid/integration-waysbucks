@@ -1,19 +1,10 @@
-const { user, profile, product, topping, toppingProduct } = require('../../models');
+const { user } = require('../../models');
 
 exports.getUsers = async (req, res) => {
   try {
     const users = await user.findAll({
-      include: [
-        {
-          model: profile,
-          as: 'profile',
-          attributes: {
-            exclude: ['createdAt', 'updatedAt', 'idUser'],
-          },
-        },
-      ],
       attributes: {
-        exclude: ['password', 'createdAt', 'updatedAt'],
+        exclude: ['password', 'createdAt'],
       },
     });
 
@@ -45,27 +36,6 @@ exports.deleteUser = async (req, res) => {
       data: {
         id,
       },
-    });
-  } catch (error) {
-    console.log(error);
-    res.send({
-      status: 'failed',
-      message: 'Server Error',
-    });
-  }
-};
-
-exports.addProfile = async (req, res) => {
-  const path = process.env.IMG_URL;
-
-  const idUser = req.user.id;
-  console.log(idUser);
-  const { category: categoryName, ...data } = req.body;
-  try {
-    await profile.create({ ...data, image: path + req.file.filename, idUser });
-    res.send({
-      status: 'success',
-      message: 'Add profile finished',
     });
   } catch (error) {
     console.log(error);

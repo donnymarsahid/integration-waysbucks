@@ -17,6 +17,9 @@ module.exports = {
       image: {
         type: Sequelize.STRING,
       },
+      typeCoffee: {
+        type: Sequelize.STRING,
+      },
       status: {
         type: Sequelize.STRING,
       },

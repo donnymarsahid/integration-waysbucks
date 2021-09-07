@@ -1,17 +1,17 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('toppingProducts', {
+    await queryInterface.createTable('toppingOrders', {
       id: {
         allowNull: false,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
-      idProduct: {
+      idOrder: {
         type: Sequelize.UUID,
         references: {
-          model: 'products',
+          model: 'orders',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -26,9 +26,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      idUser: {
-        type: Sequelize.INTEGER,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -40,6 +37,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('toppingProducts');
+    await queryInterface.dropTable('toppingOrders');
   },
 };

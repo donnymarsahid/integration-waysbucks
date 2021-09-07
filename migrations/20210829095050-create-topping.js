@@ -17,6 +17,15 @@ module.exports = {
       image: {
         type: Sequelize.STRING,
       },
+      idUser: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -14,6 +14,7 @@ module.exports = {
           fullname: 'Admin WaysBucks',
           email: 'adminwaysbucks@gmail.com',
           password: hashingPassword,
+          image: 'http://localhost:3001/images/admin.png',
           status: 'admin',
         },
       ],

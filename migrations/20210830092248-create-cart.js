@@ -8,6 +8,15 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
+      idUser: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       idProduct: {
         type: Sequelize.UUID,
         references: {
@@ -18,6 +27,9 @@ module.exports = {
         onDelete: 'CASCADE',
       },
       quantity: {
+        type: Sequelize.INTEGER,
+      },
+      subTotal: {
         type: Sequelize.INTEGER,
       },
       createdAt: {

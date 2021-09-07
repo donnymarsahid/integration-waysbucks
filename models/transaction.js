@@ -3,16 +3,16 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class transaction extends Model {
     static associate(models) {
-      transaction.belongsTo(models.cart, {
-        as: 'cart',
-        foreignKey: {
-          name: 'idOrder',
-        },
-      });
       transaction.belongsTo(models.user, {
         as: 'user',
         foreignKey: {
           name: 'idUser',
+        },
+      });
+      transaction.hasMany(models.order, {
+        as: 'orders',
+        foreignKey: {
+          name: 'idTransaction',
         },
       });
     }
@@ -24,11 +24,15 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
       },
-      idOrder: DataTypes.INTEGER,
       idUser: DataTypes.INTEGER,
-      price: DataTypes.INTEGER,
-      attachment: DataTypes.STRING,
+      name: DataTypes.STRING,
+      email: DataTypes.STRING,
+      total: DataTypes.INTEGER,
+      phone: DataTypes.STRING,
+      posCode: DataTypes.STRING,
+      address: DataTypes.STRING,
       status: DataTypes.STRING,
+      attachment: DataTypes.STRING,
     },
     {
       sequelize,
