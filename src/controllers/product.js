@@ -3,6 +3,7 @@ const { product, user } = require('../../models');
 exports.getProducts = async (req, res) => {
   try {
     const products = await product.findAll({
+      order: [['updatedAt', 'DESC']],
       include: [
         {
           model: user,

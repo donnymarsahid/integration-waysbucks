@@ -45,7 +45,7 @@ router.get('/orders', authToken, getOrders);
 // Transaction
 router.get('/transaction', authToken, getTransaction);
 router.get('/transactions', authToken, permission('admin'), getTransactions);
-router.post('/transaction', authToken, addTransaction);
+router.post('/transaction', authToken, uploadFile('image'), addTransaction);
 router.put('/transaction/:id', authToken, permission('admin'), updateTransaction);
 router.delete('/transaction/:id', authToken, permission('admin'), deleteTransaction);
 

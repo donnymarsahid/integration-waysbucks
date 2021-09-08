@@ -2,7 +2,7 @@ const { cart, user, toppingCart, topping, product, order, toppingOrder } = requi
 
 exports.getCarts = async (req, res) => {
   try {
-    const carts = await user.findAll({
+    const carts = await user.findOne({
       where: {
         id: req.user.id,
       },
@@ -43,7 +43,7 @@ exports.getCarts = async (req, res) => {
 
     res.status(200).send({
       status: 'success',
-      carts,
+      data: carts,
     });
   } catch (error) {
     res.status(500).send({
@@ -86,13 +86,13 @@ exports.addCart = async (req, res) => {
       };
     });
 
-    const addToppingCart = await toppingCart.bulkCreate(insert);
-    const addToppingOrder = await toppingOrder.bulkCreate(insertOrder);
+    if (insertOrder || insert) {
+      await toppingCart.bulkCreate(insert);
+      await toppingOrder.bulkCreate(insertOrder);
+    }
 
     res.status(200).send({
       status: 'success',
-      addCart,
-      addToppingCart,
     });
   } catch (error) {
     res.send(500).send({
@@ -105,15 +105,33 @@ exports.addCart = async (req, res) => {
 exports.deleteCart = async (req, res) => {
   try {
     const idCart = req.params.id;
-    const deleteCart = await cart.destroy({
+
+    const findCart = await cart.findOne({
       where: {
         id: idCart,
       },
     });
 
+    const findOrder = await order.findOne({
+      where: {
+        createdAt: findCart.createdAt,
+      },
+    });
+
+    const deleteCart = await cart.destroy({
+      where: {
+        id: idCart,
+      },
+    });
+    const deleteOrder = await order.destroy({
+      where: {
+        id: findOrder.id,
+      },
+    });
+
     res.status(200).send({
       status: 'success',
-      id: idCart,
+      id: findOrder.id,
     });
   } catch (error) {
     res.status(500).send({

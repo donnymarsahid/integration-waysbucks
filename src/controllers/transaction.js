@@ -62,7 +62,9 @@ exports.getTransaction = async (req, res) => {
 exports.addTransaction = async (req, res) => {
   try {
     const idUser = req.user.id;
-    const { name, email, total, phone, posCode, address, attachment } = req.body;
+    const file = process.env.IMG_URL;
+    const uploadFile = file + req.file.filename;
+    const { name, email, total, phone, posCode, address } = req.body;
 
     const addTransaction = await transaction.create({
       idUser,
@@ -73,7 +75,7 @@ exports.addTransaction = async (req, res) => {
       posCode,
       address,
       status: 'waiting approve',
-      attachment,
+      attachment: uploadFile,
     });
 
     const findOrder = await order.findAll();

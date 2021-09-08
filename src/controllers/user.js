@@ -3,6 +3,7 @@ const { user } = require('../../models');
 exports.getUsers = async (req, res) => {
   try {
     const users = await user.findAll({
+      order: [['updatedAt', 'DESC']],
       attributes: {
         exclude: ['password', 'createdAt'],
       },

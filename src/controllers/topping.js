@@ -3,6 +3,7 @@ const { topping } = require('../../models');
 exports.getToppings = async (req, res) => {
   try {
     const toppings = await topping.findAll({
+      order: [['updatedAt', 'DESC']],
       attributes: {
         exclude: ['createdAt', 'updatedAt'],
       },
