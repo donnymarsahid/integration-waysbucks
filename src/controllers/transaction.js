@@ -77,16 +77,19 @@ exports.addTransaction = async (req, res) => {
     });
 
     const findOrder = await order.findAll();
-    const getIdOrder = findOrder.map((data) => data.id);
-
-    const updateOrder = await order.update(
-      { idTransaction: addTransaction.id },
-      {
-        where: {
-          id: getIdOrder,
-        },
+    const getIdOrder = findOrder.map(async (data) => {
+      if (data.idTransaction === null) {
+        const updateOrder = await order.update(
+          { idTransaction: addTransaction.id },
+          {
+            where: {
+              id: data.id,
+              idTransaction: null,
+            },
+          }
+        );
       }
-    );
+    });
 
     const findCart = await cart.findAll();
     const getIdCart = findCart.map((data) => data.id);
