@@ -46,3 +46,56 @@ exports.deleteUser = async (req, res) => {
     });
   }
 };
+
+exports.getUser = async (req, res) => {
+  try {
+    const userId = await user.findOne({
+      where: {
+        id: req.user.id,
+      },
+      attributes: {
+        exclude: ['password', 'createdAt'],
+      },
+    });
+
+    res.send({
+      status: 'success',
+      data: userId,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: 'failed',
+      message: 'Server Error',
+    });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  try {
+    const path = process.env.IMG_URL;
+    const uploadFile = path + req.file.filename;
+    const { fullname } = req.body;
+    const idUser = req.user.id;
+
+    const updateUserId = await user.update(
+      { fullname, image: uploadFile },
+      {
+        where: {
+          id: idUser,
+        },
+      }
+    );
+
+    res.status(200).send({
+      status: 'success',
+      id: updateUserId,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: 'failed',
+      message: 'Server Error',
+    });
+  }
+};

@@ -3,7 +3,7 @@ const { order, transaction, user, toppingOrder, topping, product, cart } = requi
 exports.getTransaction = async (req, res) => {
   try {
     console.log(req.user.id);
-    const transactionUser = await user.findAll({
+    const transactionUser = await user.findOne({
       where: {
         id: req.user.id,
       },
@@ -37,9 +37,6 @@ exports.getTransaction = async (req, res) => {
                     as: 'junction',
                     attributes: [],
                   },
-                  attributes: {
-                    exclude: ['createdAt'],
-                  },
                 },
               ],
             },
@@ -49,7 +46,7 @@ exports.getTransaction = async (req, res) => {
     });
     res.status(200).send({
       status: 'success',
-      transactionUser,
+      data: transactionUser,
     });
   } catch (error) {
     res.status(500).send({
@@ -154,7 +151,7 @@ exports.getTransactions = async (req, res) => {
     });
     res.status(200).send({
       status: 'success',
-      transactions,
+      data: transactions,
     });
   } catch (error) {
     res.status(500).send({
@@ -188,8 +185,9 @@ exports.deleteTransaction = async (req, res) => {
 exports.updateTransaction = async (req, res) => {
   try {
     const idTransaction = req.params.id;
+    const status = req.body.status;
     await transaction.update(
-      { ...req.body },
+      { status },
       {
         where: {
           id: idTransaction,
@@ -200,7 +198,7 @@ exports.updateTransaction = async (req, res) => {
     res.send({
       status: 'success',
       data: {
-        idTransaction,
+        status,
       },
     });
   } catch (error) {

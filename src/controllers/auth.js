@@ -38,6 +38,7 @@ exports.register = async (req, res) => {
       email: req.body.email,
       password: hashingPassword,
       status: 'user',
+      image: 'http://localhost:3001/images/profile.png',
     });
     const token = jwt.sign({ id: newUser.id, status: newUser.status }, process.env.JWT_SECRET, {
       expiresIn: '24h',
