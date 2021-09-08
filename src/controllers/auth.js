@@ -98,6 +98,7 @@ exports.login = async (req, res) => {
           fullname: userExist.fullname,
           email: userExist.email,
           token,
+          status: userExist.status,
         },
       },
     });

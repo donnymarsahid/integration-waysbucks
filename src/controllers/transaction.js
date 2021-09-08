@@ -110,7 +110,6 @@ exports.getTransactions = async (req, res) => {
   try {
     const transactions = await user.findAll({
       order: [['updatedAt', 'DESC']],
-
       include: [
         {
           model: transaction,
