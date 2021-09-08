@@ -2,8 +2,8 @@ const { order, transaction, user, toppingOrder, topping, product, cart } = requi
 
 exports.getTransaction = async (req, res) => {
   try {
-    console.log(req.user.id);
     const transactionUser = await user.findOne({
+      order: [['updatedAt', 'DESC']],
       where: {
         id: req.user.id,
       },
@@ -109,6 +109,8 @@ exports.addTransaction = async (req, res) => {
 exports.getTransactions = async (req, res) => {
   try {
     const transactions = await user.findAll({
+      order: [['updatedAt', 'DESC']],
+
       include: [
         {
           model: transaction,

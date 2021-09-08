@@ -1,9 +1,18 @@
-const { user } = require('../../models');
+const { user, transaction } = require('../../models');
 
 exports.getUsers = async (req, res) => {
   try {
     const users = await user.findAll({
       order: [['updatedAt', 'DESC']],
+      include: [
+        {
+          model: transaction,
+          as: 'transactions',
+          attributes: {
+            exclude: ['createdAt'],
+          },
+        },
+      ],
       attributes: {
         exclude: ['password', 'createdAt'],
       },
