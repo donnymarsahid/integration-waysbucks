@@ -3,6 +3,7 @@ const { cart, user, toppingCart, topping, product, order, toppingOrder } = requi
 exports.getCarts = async (req, res) => {
   try {
     const carts = await user.findOne({
+      order: [['updatedAt', 'DESC']],
       where: {
         id: req.user.id,
       },
