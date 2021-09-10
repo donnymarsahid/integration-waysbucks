@@ -145,6 +145,7 @@ exports.updateProduct = async (req, res) => {
 exports.getTypeCoffee = async (req, res) => {
   try {
     const products = await product.findAll({
+      order: [['updatedAt', 'DESC']],
       where: {
         typeCoffee: 'coffee variant',
       },
