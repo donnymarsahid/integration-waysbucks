@@ -2,43 +2,41 @@ const { order, transaction, user, toppingOrder, topping, product, cart } = requi
 
 exports.getTransaction = async (req, res) => {
   try {
-    const transactionUser = await user.findOne({
+    const transactionUser = await transaction.findAll({
       order: [['updatedAt', 'DESC']],
       where: {
-        id: req.user.id,
+        idUser: req.user.id,
       },
       include: [
         {
-          model: transaction,
-          as: 'transactions',
+          model: user,
+          as: 'user',
+          attributes: {
+            exclude: ['password'],
+          },
+        },
+        {
+          model: order,
+          as: 'orders',
           attributes: {
             exclude: ['createdAt'],
           },
           include: [
             {
-              model: order,
-              as: 'orders',
+              model: product,
+              as: 'product',
               attributes: {
                 exclude: ['createdAt'],
               },
-              include: [
-                {
-                  model: product,
-                  as: 'product',
-                  attributes: {
-                    exclude: ['createdAt'],
-                  },
-                },
-                {
-                  model: topping,
-                  as: 'toppings',
-                  through: {
-                    model: toppingOrder,
-                    as: 'junction',
-                    attributes: [],
-                  },
-                },
-              ],
+            },
+            {
+              model: topping,
+              as: 'toppings',
+              through: {
+                model: toppingOrder,
+                as: 'junction',
+                attributes: [],
+              },
             },
           ],
         },
@@ -108,48 +106,44 @@ exports.addTransaction = async (req, res) => {
 
 exports.getTransactions = async (req, res) => {
   try {
-    const transactions = await user.findAll({
+    const transactions = await transaction.findAll({
       order: [['updatedAt', 'DESC']],
       include: [
         {
-          model: transaction,
-          as: 'transactions',
+          model: user,
+          as: 'user',
+          attributes: {
+            exclude: ['password'],
+          },
+        },
+        {
+          model: order,
+          as: 'orders',
           attributes: {
             exclude: ['createdAt'],
           },
           include: [
             {
-              model: order,
-              as: 'orders',
+              model: product,
+              as: 'product',
               attributes: {
                 exclude: ['createdAt'],
               },
-              include: [
-                {
-                  model: product,
-                  as: 'product',
-                  attributes: {
-                    exclude: ['createdAt'],
-                  },
-                },
-                {
-                  model: topping,
-                  as: 'toppings',
-                  through: {
-                    model: toppingOrder,
-                    as: 'junction',
-                    attributes: [],
-                  },
-                  attributes: {
-                    exclude: ['createdAt'],
-                  },
-                },
-              ],
+            },
+            {
+              model: topping,
+              as: 'toppings',
+              through: {
+                model: toppingOrder,
+                as: 'junction',
+                attributes: [],
+              },
             },
           ],
         },
       ],
     });
+
     res.status(200).send({
       status: 'success',
       data: transactions,
