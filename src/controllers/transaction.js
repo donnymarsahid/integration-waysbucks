@@ -204,3 +204,56 @@ exports.updateTransaction = async (req, res) => {
     });
   }
 };
+
+exports.getDetailTransaction = async (req, res) => {
+  try {
+    const detailTransaction = await transaction.findOne({
+      where: {
+        id: req.params.id,
+      },
+      include: [
+        {
+          model: user,
+          as: 'user',
+          attributes: {
+            exclude: ['password'],
+          },
+        },
+        {
+          model: order,
+          as: 'orders',
+          attributes: {
+            exclude: ['createdAt'],
+          },
+          include: [
+            {
+              model: product,
+              as: 'product',
+              attributes: {
+                exclude: ['createdAt'],
+              },
+            },
+            {
+              model: topping,
+              as: 'toppings',
+              through: {
+                model: toppingOrder,
+                as: 'junction',
+                attributes: [],
+              },
+            },
+          ],
+        },
+      ],
+    });
+    res.status(200).send({
+      status: 'success',
+      data: detailTransaction,
+    });
+  } catch (error) {
+    res.status(500).send({
+      status: 'failed',
+    });
+    console.log(error);
+  }
+};

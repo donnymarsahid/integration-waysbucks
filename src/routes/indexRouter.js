@@ -5,7 +5,7 @@ const { login, register, checkAuth } = require('../controllers/auth');
 const { getCarts, addCart, deleteCart, getOrders } = require('../controllers/cart');
 const { addProduct, getProducts, detailProduct, updateProduct, deleteProduct, getTypeCoffee } = require('../controllers/product');
 const { getToppings, addTopping, detailTopping, updateTopping, deleteTopping } = require('../controllers/topping');
-const { addTransaction, getTransaction, getTransactions, deleteTransaction, updateTransaction } = require('../controllers/transaction');
+const { addTransaction, getTransaction, getTransactions, deleteTransaction, updateTransaction, getDetailTransaction } = require('../controllers/transaction');
 const { getUsers, deleteUser, getUser, updateUser } = require('../controllers/user');
 const { authToken, permission } = require('../middlewares/auth');
 const { uploadFile } = require('../middlewares/uploadFile');
@@ -50,5 +50,6 @@ router.get('/transactions', authToken, permission('admin'), getTransactions);
 router.post('/transaction', authToken, uploadFile('image'), addTransaction);
 router.put('/transaction/:id', authToken, updateTransaction);
 router.delete('/transaction/:id', authToken, permission('admin'), deleteTransaction);
+router.get('/transaction/:id', authToken, permission('admin'), getDetailTransaction);
 
 module.exports = router;

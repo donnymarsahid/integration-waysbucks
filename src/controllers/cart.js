@@ -2,39 +2,37 @@ const { cart, user, toppingCart, topping, product, order, toppingOrder } = requi
 
 exports.getCarts = async (req, res) => {
   try {
-    const carts = await user.findOne({
+    const carts = await cart.findAll({
       order: [['updatedAt', 'DESC']],
       where: {
-        id: req.user.id,
+        idUser: req.user.id,
       },
       include: [
         {
-          model: cart,
-          as: 'carts',
+          model: user,
+          as: 'user',
           attributes: {
             exclude: ['createdAt'],
           },
-          include: [
-            {
-              model: product,
-              as: 'product',
-              attributes: {
-                exclude: ['createdAt'],
-              },
-            },
-            {
-              model: topping,
-              as: 'toppings',
-              through: {
-                model: toppingCart,
-                as: 'junction',
-                attributes: [],
-              },
-              attributes: {
-                exclude: ['createdAt'],
-              },
-            },
-          ],
+        },
+        {
+          model: product,
+          as: 'product',
+          attributes: {
+            exclude: ['createdAt'],
+          },
+        },
+        {
+          model: topping,
+          as: 'toppings',
+          through: {
+            model: toppingCart,
+            as: 'junction',
+            attributes: [],
+          },
+          attributes: {
+            exclude: ['createdAt'],
+          },
         },
       ],
       attributes: {
