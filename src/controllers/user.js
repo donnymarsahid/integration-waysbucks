@@ -84,11 +84,11 @@ exports.updateUser = async (req, res) => {
   try {
     const path = process.env.IMG_URL;
     const uploadFile = path + req.file.filename;
-    const { fullname } = req.body;
+    const { fullname, phone, posCode, address } = req.body;
     const idUser = req.user.id;
 
     const updateUserId = await user.update(
-      { fullname, image: uploadFile },
+      { fullname, image: uploadFile, phone, posCode, address },
       {
         where: {
           id: idUser,
