@@ -69,6 +69,7 @@ exports.addCart = async (req, res) => {
       idProduct,
       quantity,
       subTotal,
+      cart: addCart.id,
     });
 
     let insert = idTopping.map((data) => {
@@ -105,32 +106,20 @@ exports.deleteCart = async (req, res) => {
   try {
     const idCart = req.params.id;
 
-    const findCart = await cart.findOne({
+    await cart.destroy({
       where: {
         id: idCart,
       },
     });
-
-    const findOrder = await order.findOne({
+    await order.destroy({
       where: {
-        createdAt: findCart.createdAt,
-      },
-    });
-
-    const deleteCart = await cart.destroy({
-      where: {
-        id: idCart,
-      },
-    });
-    const deleteOrder = await order.destroy({
-      where: {
-        id: findOrder.id,
+        cart: idCart,
       },
     });
 
     res.status(200).send({
       status: 'success',
-      id: findOrder.id,
+      id: idCart,
     });
   } catch (error) {
     res.status(500).send({
