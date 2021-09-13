@@ -111,10 +111,19 @@ exports.updateUser = async (req, res) => {
 
 exports.getUserDetail = async (req, res) => {
   try {
-    const userDetail = await user.findOne({
+    const userDetail = await transaction.findOne({
       where: {
         id: req.params.id,
       },
+      include: [
+        {
+          model: user,
+          as: 'user',
+          attributes: {
+            exclude: ['password', 'createdAt'],
+          },
+        },
+      ],
       attributes: {
         exclude: ['password', 'createdAt'],
       },

@@ -71,9 +71,9 @@ const socketIo = (io) => {
               },
             },
           ],
-          order: [['createdAt', 'ASC']],
+          order: [['createdAt', 'DESC']],
           attributes: {
-            exclude: ['createdAt', 'updatedAt', 'idRecipient', 'idSender'],
+            exclude: ['updatedAt', 'idRecipient', 'idSender'],
           },
         });
 
