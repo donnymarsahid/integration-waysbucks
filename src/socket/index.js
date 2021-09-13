@@ -1,4 +1,4 @@
-const { chat, user } = require('../../models');
+const { notification, user } = require('../../models');
 const jwt = require('jsonwebtoken');
 
 const { Op } = require('sequelize');
@@ -46,7 +46,7 @@ const socketIo = (io) => {
         const verified = jwt.verify(token, tokenKey);
         const idRecipient = payload;
         const idSender = verified.id;
-        const data = await chat.findAll({
+        const data = await notification.findAll({
           where: {
             idSender: {
               [Op.or]: [idRecipient, idSender],
@@ -94,7 +94,7 @@ const socketIo = (io) => {
 
         console.log(verified.id);
 
-        await chat.create({
+        await notification.create({
           message,
           idRecipient,
           idSender,

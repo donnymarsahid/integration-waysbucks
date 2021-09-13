@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": null,
-    "database": "waysbucks_testing_socket",
+    "database": "waysbucks_be",
     "host": "localhost",
     "dialect": "mysql"
   },

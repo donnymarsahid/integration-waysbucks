@@ -1,15 +1,15 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class chat extends Model {
+  class notification extends Model {
     static associate(models) {
-      chat.belongsTo(models.user, {
+      notification.belongsTo(models.user, {
         as: 'sender',
         foreignKey: {
           name: 'idSender',
         },
       });
-      chat.belongsTo(models.user, {
+      notification.belongsTo(models.user, {
         as: 'recipient',
         foreignKey: {
           name: 'idRecipient',
@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
-  chat.init(
+  notification.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -30,8 +30,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'chat',
+      modelName: 'notification',
     }
   );
-  return chat;
+  return notification;
 };

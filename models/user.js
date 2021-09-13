@@ -27,13 +27,13 @@ module.exports = (sequelize, DataTypes) => {
           name: 'idUser',
         },
       });
-      user.hasMany(models.chat, {
+      user.hasMany(models.notification, {
         as: 'senderMessage',
         foreignKey: {
           name: 'idSender',
         },
       });
-      user.hasMany(models.chat, {
+      user.hasMany(models.notification, {
         as: 'recipientMessage',
         foreignKey: {
           name: 'idRecipient',
