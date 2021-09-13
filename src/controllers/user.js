@@ -108,3 +108,29 @@ exports.updateUser = async (req, res) => {
     });
   }
 };
+
+exports.getUserDetail = async (req, res) => {
+  try {
+    const userDetail = await user.findOne({
+      where: {
+        id: req.params.id,
+      },
+      attributes: {
+        exclude: ['password', 'createdAt'],
+      },
+    });
+
+    res.send({
+      status: 'success',
+      data: {
+        userDetail,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      status: 'failed',
+      message: 'Server Error',
+    });
+  }
+};
